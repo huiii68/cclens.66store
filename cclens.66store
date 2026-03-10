@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@cclens.66 Mimipark 美瞳订购</title>
+<style>
+body{font-family: Arial,sans-serif;margin:0;background:linear-gradient(120deg,#ffe4e1,#fff0f5);}
+header{background:#ff69b4;color:white;text-align:center;padding:20px 10px;}
+h1,h2{margin:5px}
+.container{padding:10px;}
+.category-btn{display:inline-block;padding:12px 20px;margin:10px;border:none;border-radius:8px;background:#ff1493;color:white;font-size:16px;cursor:pointer;}
+.product-card{background:white;margin:10px 0;padding:10px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.product-card img{max-width:100%;border-radius:8px;}
+button.order-btn{background:#25D366;color:white;border:none;padding:10px;margin-top:5px;border-radius:8px;cursor:pointer;font-size:16px;}
+#ig-btn{background:#e1306c;color:white;border:none;padding:10px 20px;margin-top:10px;border-radius:8px;cursor:pointer;font-size:16px;}
+input,select{padding:8px;margin:5px 0;width:90%;max-width:250px;}
+.content{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>@cclens.66</h1>
+<p>Mimipark Contact Lens Store | 美瞳订购</p>
+<button id="ig-btn" onclick="window.open('https://www.instagram.com/cclens.66','_blank')">Instagram @cclens.66</button>
+</header>
+
+<div class="container">
+<button class="category-btn" onclick="toggleCategory('daily')">日抛 Daily Lens</button>
+<button class="category-btn" onclick="toggleCategory('sixmonth')">半年抛 6 Months Lens</button>
+
+<div id="daily" class="content"></div>
+<div id="sixmonth" class="content"></div>
+</div>
+
+<script>
+// 折叠功能
+function toggleCategory(id){
+    let content=document.getElementById(id);
+    content.style.maxHeight=content.style.maxHeight?"0":"10000px";
+}
+
+// 添加产品卡片
+function addProduct(containerId,name,price,img){
+    let container=document.getElementById(containerId);
+    let card=document.createElement("div");
+    card.className="product-card";
+    card.innerHTML=`<h2>${name}</h2>
+    <img src="${img}" alt="${name}">
+    <p>价格 Price: ${price}</p>
+    <p>数量 Quantity</p>
+    <input type="number" value="1" id="${containerId}-${name}-qty">
+    <p>姓名 Name</p>
+    <input type="text" id="${containerId}-${name}-name">
+    <p>电话 Phone</p>
+    <input type="text" id="${containerId}-${name}-phone">
+    <p>地址 Address</p>
+    <input type="text" id="${containerId}-${name}-address">
+    <br>
+    <button class="order-btn" onclick="order('${containerId}','${name}')">WhatsApp 下单 Order</button>`;
+    container.appendChild(card);
+}
+
+// WhatsApp下单函数
+function order(containerId,name){
+    let qty=document.getElementById(containerId+'-'+name+'-qty').value;
+    let customerName=document.getElementById(containerId+'-'+name+'-name').value;
+    let phone=document.getElementById(containerId+'-'+name+'-phone').value;
+    let address=document.getElementById(containerId+'-'+name+'-address').value;
+    let type=containerId=="daily"?"Daily":"6 Months";
+    let message=`Order from @cclens.66%0AType: ${type}%0AStyle: ${name}%0AQuantity: ${qty}%0AName: ${customerName}%0APhone: ${phone}%0AAddress: ${address}`;
+    window.open(`https://wa.me/60127505198?text=${message}`);
+}
+
+// 生成114款产品
+let dailyProducts=[], sixMonthProducts=[];
+
+// 使用你提供的三张图片
+let dailyImg="https://i.imgur.com/你的日抛图片.jpg"; // 图1
+let sixMonthImgs=["https://i.imgur.com/你的半年抛图片2.jpg","https://i.imgur.com/你的半年抛图片3.jpg"]; // 图2/3
+
+// 日抛 57款
+for(let i=1;i<=57;i++){
+    dailyProducts.push({name:`日抛款式${i}`,price:"RM25/1 RM70/3 RM135/6",img:dailyImg});
+}
+
+// 半年抛 57款，图2/图3交替
+for(let i=1;i<=57;i++){
+    let img=sixMonthImgs[i%2];
+    sixMonthProducts.push({name:`半年抛款式${i}`,price:"RM20/1 RM55/3 RM90/5",img:img});
+}
+
+// 添加到页面
+dailyProducts.forEach(p=>addProduct("daily",p.name,p.price,p.img));
+sixMonthProducts.forEach(p=>addProduct("sixmonth",p.name,p.price,p.img));
+
+</script>
+</body>
+</html>
